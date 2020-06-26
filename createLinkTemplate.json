@@ -1,0 +1,18 @@
+﻿{
+    "request": {
+        "createLink": true,
+        "settings": {
+            "linkKind": 6,
+            "expiration": null,
+            "role": 1,
+            "restrictShareMembership": true,
+            "updatePassword": false,
+            "password": ""
+        },
+        "peoplePickerInput": "[{\"Key\":\"{0}\",\"DisplayText\":\" \",\"IsResolved\":false,\"Description\":\"{0}\",\"EntityType\":\"User\",\"EntityData\":{\"IsAltSecIdPresent\":\"False\",\"ObjectId\":\"fa0eefda-9a88-4d9e-8c78-6bd549be0b7b\",\"Title\":\"\",\"Email\":\"\",\"MobilePhone\":\"\",\"OtherMails\":\"\",\"Department\":\"\"},\"MultipleMatches\":[],\"ProviderName\":\"Tenant\",\"ProviderDisplayName\":\"租户\"}]",
+        "emailData": {
+            "body": "",
+            "subject": ""
+        }
+    }
+}
