@@ -45,18 +45,20 @@ namespace LearningMaterialHub
             {
                 foreach(var materialId in request.MaterialList)
                 {
-                    this.txtTraceLog.Text += string.Format(@"Creating link for Email={0} Material={1}\n\r", request.EmailAddress, materialId);
+                    this.txtTraceLog.AppendText(string.Format(@"Creating link for Email={0} Material={1}", request.EmailAddress, materialId));
+                    this.txtTraceLog.AppendText(Environment.NewLine);
 
                     Task.Run(() =>
                     {
                         connector.CreateLink(materialId, request.EmailAddress);
                     }).Wait();
 
-                    this.txtTraceLog.Text += "Completed.\n\r";
+                    this.txtTraceLog.Text += "Completed.";
+                    this.txtTraceLog.AppendText(Environment.NewLine);
                 }
 
-                // Sleep 3 seconds between each of the requests
-                Thread.Sleep(3000);
+                // Sleep 1 second between each of the requests
+                Thread.Sleep(1000);
             }
         }
     }

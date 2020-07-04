@@ -13,7 +13,7 @@ namespace LearningMaterialHub
     {
         private static int Column_DateTime = 3;
         private static int Column_EmailAddress = 6;
-        private static int Column_MaterialList = 7;
+        private static List<int> Column_MaterialList = new List<int>() { 7, 8, 9, 10 };
 
         private string excelFileFullPath = string.Empty;
 
@@ -45,7 +45,7 @@ namespace LearningMaterialHub
 
                 string dateTimeStr = timeCell.Value.ToString();
                 string dateTimeStr2 = timeCell.Value2.ToString();
-                var formats = new[] { "yyyy/M/d h:mm:ss" };
+                var formats = new[] { "yyyy/M/d H:mm:ss" };
                 DateTime dateTime = DateTime.Now; 
                 if (!DateTime.TryParseExact(dateTimeStr, formats, CultureInfo.InvariantCulture, DateTimeStyles.None, out dateTime))
                 {
@@ -65,37 +65,44 @@ namespace LearningMaterialHub
 
                 string emailAddress = emailCell.Value2.ToString();
 
-                Range materialCell = xlWorkSheet.Cells[currentIndex, Column_MaterialList];
-                if (materialCell == null || string.IsNullOrEmpty(materialCell.Value2.ToString()))
+                foreach (int materialType in Column_MaterialList)
                 {
-                    continue;
-                }
-
-                string materialList = materialCell.Value2.ToString();
-                string[] materials = materialList.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
-                List<string> materialIdList = new List<string>();
-                int maIndex = 0;
-                foreach(string material in materials)
-                {
-                    if (material.Length < 3)
+                    Range materialCell = xlWorkSheet.Cells[currentIndex, materialType];
+                    if (materialCell == null || materialCell.Value2 == null || string.IsNullOrEmpty(materialCell.Value2.ToString()))
                     {
                         continue;
                     }
 
-                    if (maIndex >= 3)
+                    string materialList = materialCell.Value2.ToString();
+                    if (string.IsNullOrEmpty(materialList))
                     {
-                        break;
+                        continue;
                     }
 
-                    materialIdList.Add(material.Substring(0, 3));
-                    maIndex++;
+                    string[] materials = materialList.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+                    List<string> materialIdList = new List<string>();
+                    int maIndex = 0;
+                    foreach (string material in materials)
+                    {
+                        if (material.Length < 3)
+                        {
+                            continue;
+                        }
+
+                        if (maIndex >= 3)
+                        {
+                            break;
+                        }
+
+                        materialIdList.Add(material.Substring(0, 3));
+                        maIndex++;
+                    }
+
+                    MaterialRequest request = new MaterialRequest();
+                    request.EmailAddress = emailAddress;
+                    request.MaterialList = materialIdList;
+                    result.Add(request);
                 }
-
-                MaterialRequest request = new MaterialRequest();
-                request.EmailAddress = emailAddress;
-                request.MaterialList = materialIdList;
-
-                result.Add(request);
             }
 
             return result;
